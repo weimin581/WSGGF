@@ -1,0 +1,129 @@
+close all;
+clear all;
+addpath 'WSGGF'
+addpath 'FWSGGF'
+
+
+% section 4.1:smoothing（8，0.4）
+p = im2double(imread('12.png'));
+I = p;
+[m, n, channel] = size(p);
+r2 = 1;  % adaptive term radius (fixed)
+h = 2.4; % fixed
+%%% set parameter
+r = 12;  % 原始滤波半径
+epsilon = 0.4^2; % 正则化参数
+s = 4;   % 下采样系数 (仅F_WSGDGIF用到,fixed)
+
+% tic;
+% %%%%%%%%%%%%%%%%%%%%%算法1： GDGIF %%%%%%%%%%%%%%%%%
+% GDGIF = zeros(size(I));
+% for i = 1: channel
+% [GDGIF(:,:,i)] = gguidedfilter(I(:,:,i),p(:,:,i),r,epsilon);
+% end
+% %%计算PSNR
+% psnr_1=psnr(GDGIF,p);
+% fprintf('\n the psnr1 value is %0.4f',psnr_1);
+% fprintf('\n');
+
+% %%%%%%%%%%%%%%%%%%%%%算法2： SKWGIF %%%%%%%%%%%%%%%%%
+% 将input的宽高变为偶数
+
+% if mod(m,2) ~= 0
+%  m=m+1;
+% end
+% 
+% if mod(n,2) ~= 0
+%  n=n+1;
+% end
+% p = imresize(p,[m,n]);
+% I = p;
+
+% SKWGIF = zeros(size(I));% 初始化
+% for i = 1:channel
+% SKWGIF(:,:,i) = SteeringKernel_WGIF(I(:,:,i), p(:,:,i), r, epsilon, h);
+% end
+% 
+% %%计算PSNR
+% psnr_2=psnr(SKWGIF,p);
+% fprintf('\n the psnr2 value is %0.4f',psnr_2);
+% fprintf('\n');
+% 
+% % %%%%%%%%%%%%%%%%%%%%%算法3： 边窗引导滤波_殷慧 %%%%%%%%%%%%%%%%%
+% SWGIF = zeros(size(I));
+% for i = 1: channel
+%  [SWGIF(:,:,i)] = sidewindowguidedfilter_8w(I(:,:,i),p(:,:,i),r,epsilon);
+% end
+% %%计算PSNR
+% psnr_3=psnr(SWGIF,p);
+% fprintf('\n the psnr3 value is %0.4f',psnr_3);
+% fprintf('\n');
+% 
+% %%%%%%%%%%%%%%%%%%算法4:  AnisGIF%%%%%%%%%%%%%%%%%%
+% AnisGIF = zeros(size(I));
+% r1 = 5; % 默认参数
+% epsilon1 = 0.1^2; % 默认参数
+% 
+% for i = 1: channel
+% AnisGIF(:, :, i) = anisgf(I(:, :, i), p(:, :, i), r1, epsilon1, 0.5);
+% end
+% 
+% %%计算PSNR
+% psnr_4=psnr(AnisGIF,p);
+% fprintf('\n the psnr4 value is %0.4f',psnr_4);
+% fprintf('\n');
+
+%%%%%%%%%%%%%%%%% 5. WSGDGIF  %%%%%%%%%%%%%%%%
+WSGDGIF = WSGDGIF(I,p,r,epsilon,r2);
+
+%%计算PSNR
+psnr_5=psnr(WSGDGIF,p);
+fprintf('\n the psnr5 value is %0.4f',psnr_5);
+fprintf('\n');
+
+%%%%%%%%%%%%%%%%% 6. F_WSGDGIF  %%%%%%%%%%%%%%%%
+F_WSGDGIF = F_WSGDGIF(I,p,r,epsilon,r2,s);
+
+%%计算PSNR
+psnr_6=psnr(F_WSGDGIF,p);
+fprintf('\n the psnr6 value is %0.4f',psnr_6);
+fprintf('\n');
+
+% [hei, wid, ~] = size(p);
+% MSE_q = sum(sum((F_WSGDGIF- p) .* (F_WSGDGIF - p))) / (hei * wid);
+% PSNR_q = 10 * log10(1/ MSE_q)
+
+% figure(1); 
+% imshow([GDGIF,p-GDGIF+0.5],[0,1]);title('1-GDGIF');
+% 
+% figure(2); 
+% imshow([SKWGIF,p-SKWGIF+0.5],[0,1]);title('2-SKWGIF');
+% 
+% figure(3);
+% imshow([SWGIF,p-SWGIF+0.5],[0,1]);title('3-SWGIF');
+% 
+% figure(4);
+% imshow([AnisGIF, p-AnisGIF+0.5],[0,1]);title('4-AnisGIF');
+
+% figure(5);
+% imshow([WSGDGIF, p-WSGDGIF+0.5],[0,1]);title('5-WSGDGIF');
+% 
+% figure(6);
+% imshow([F_WSGDGIF,p-F_WSGDGIF+0.5],[0,1]);title('6-F_WSGDGIF');
+figure(5);
+imshow([WSGDGIF, p],[0,1]);title('5-WSGDGIF');
+
+figure(6);
+imshow([F_WSGDGIF,p],[0,1]);title('6-F_WSGDGIF');
+
+% % %%%%%%%%%%%%%%%%%%%%%%显示结果
+% figure(1);
+% imshow([ p,SWGIF AnisGIF, q_WSGDGIF],[0,1]);
+% imwrite(p,'C:\Users\sunkaiand\Desktop\ssim\bench.png');
+% imwrite(GDGIF,'C:\Users\sunkaiand\Desktop\ssim\1.png');
+% imwrite(SKWGIF,'C:\Users\sunkaiand\Desktop\ssim\2.png');
+% imwrite(SWGIF,'C:\Users\sunkaiand\Desktop\ssim\3.png');
+% imwrite(AnisGIF,'C:\Users\sunkaiand\Desktop\ssim\4.png');
+% imwrite(WSGDGIF,'C:\Users\sunkaiand\Desktop\ssim\5.png');
+% imwrite(F_WSGDGIF,'C:\Users\sunkaiand\Desktop\ssim\6.png');
+
