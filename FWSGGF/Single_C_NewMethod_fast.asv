@@ -1,0 +1,55 @@
+
+close all;
+clear all;
+%%%%%%%%%%%%%%%%%%%%%%%%% single-channel %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% original = im2double(imread('testdata/cat.bmp')); %p：待滤波图像
+% I = im2double(imread('testdata/cat.bmp')); %I：引导图像
+
+original = im2double(imread('C:\Users\sunkaiand\Desktop\WSGDGIF\standard_test_images\woman_darkhair.tif')); %p：待滤波图像
+I = original; %I：引导图像
+
+
+r = 8; %原始滤波半径
+r2=1; %adaptive term radius
+epsilon = 0.1^2;
+s = 4;
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  :算法2：xx-GIF %%%%%%%%%%%%%%%%
+tic;
+
+q_x = WSGDGIF(I,original,r,epsilon,r2,s);
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%(1):上下边窗
+% [GDGIF_res_l,GDGIF_res_r] = sidewindow_sideweighting_LR_fast(I,original,r,epsilon,r2,s);
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%(2):左右边窗
+% [GDGIF_res_u,GDGIF_res_d] = sidewindow_sideweighting_UD_fast(I,original,r,epsilon,r2,s);
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%(3):WNES边窗
+% [GDGIF_res_wn,GDGIF_res_en,GDGIF_res_ws,GDGIF_res_es] = sidewindow_sideweighting_WNES_fast(I,original,r,epsilon,r2,s);
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   :初始化
+% q_x = ones(size(I));
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   :最后选择结果
+% for i=1:1
+% 
+%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%: 8窗口计算部分
+% q_x(:,:,i)=min_distance_8(GDGIF_res_l(:,:,i),GDGIF_res_r(:,:,i),GDGIF_res_u(:,:,i),...
+%                         GDGIF_res_d(:,:,i),GDGIF_res_wn(:,:,i),GDGIF_res_en(:,:,i),...
+%                        GDGIF_res_ws(:,:,i),GDGIF_res_es(:,:,i),original(:,:,i));        
+% end
+toc;
+%%计算PSNR
+psnr_sub=psnr(q_x,original);
+fprintf('\n the psnr value is %0.4f',psnr_sub);
+fprintf('\n');
+
+% %%%%%%%%%%%%%%%%%%%%%%显示结果
+% % 
+figure(1);
+imshow([ q_x,  original],[0,1]);
+
+% imwrite(original,'C:\Users\sunkaiand\Desktop\SWF+Fusion\sidewindow\ssim\cat\cat.png');
+% imwrite(SWF_res,'C:\Users\sunkaiand\Desktop\SWF+Fusion\sidewindow\ssim\cat\SWF_res.png');
+% imwrite(SWF_res,'C:\Users\sunkaiand\Desktop\论文数据\2.aggregation result\Aggregation\ssim\cat\0.4.bmp');
+
