@@ -7,6 +7,14 @@ is further proposed by incorporating a simple but effective down-sampling strate
 edge-aware smoothing, detail enhancement, high dynamic range image (HDR) compression, image luminance adjustment, depth map upsampling and single image haze removal, the effectiveness and flexibility of our 
 proposed methods are verified.
 
+![image](https://github.com/user-attachments/assets/937bfc9d-487e-4684-b7c5-2607ad7af2ac)
+![image](https://github.com/user-attachments/assets/11b2118b-c990-4516-b269-fe8baf02e339)
+Comparison of image luminance adjustment via different algorithms on the LIME and LOL dataset. 
+
+![image](https://github.com/user-attachments/assets/92716547-bbf3-45fa-b313-03abc1ca7021)
+
+
+
 @article{yuan2024weighted,
   title={Weighted side-window based gradient guided image filtering},
   author={Yuan, Weimin and Meng, Cai and Bai, Xiangzhi},
