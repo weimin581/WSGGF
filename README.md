@@ -1,5 +1,7 @@
 Title. Weighted side-window based gradient guided image filtering
 
+Link: https://www.sciencedirect.com/science/article/pii/S0031320323007033
+
 Abstract. Image filtering under guidance image, known as guided filtering (GF), has been successfully applied to a variety of applications. Existing GF methods utilize either conventional full window-based framework (FWF) or simple 
 uniformly weighted aggregation strategy (UWA); thereby they suffer from edge-blurring. In this paper, based upon gradient guided filtering (GGF), a weighted side-window based gradient guided filtering (WSGGF) is 
 proposed to address the aforementioned problem. First, both regression and adaptive regularization terms in GGF are improved upon eight side windows by introducing side window-based framework (SWF). L1 norm is adopted 
